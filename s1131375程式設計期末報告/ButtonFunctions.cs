@@ -7,9 +7,9 @@ namespace s1131375程式設計期末報告
     {
         public void Empty(object sender,  EventArgs e)
         {
-            Button btn = sender as Button;
+            //Button btn = sender as Button;
 
-            MessageBox.Show((string)btn.Tag);
+            //MessageBox.Show((string)btn.Tag);
         } // 單純空
 
     }

@@ -1,6 +1,6 @@
 using System;
 
-namespace s1131375程式設計期末報告
+namespace s1131375程式設計期末報告 // v3
 {
     public partial class Form1 : Form
     {
@@ -16,38 +16,38 @@ namespace s1131375程式設計期末報告
             f = new ButtonFunctions();
 
             // 排版初始化
-            string[] difficulty = new string[] { "simple", "medium", "hard" }; // 連結難度的地方
-            DifficultySwitch(difficulty[0]);
+            string[] difficulty = new string[] { "simple", "medium", "hard" };
+            DifficultySwitch(difficulty[0]); // 連結難度的地方
         }
 
-        // 選擇難度
         void DifficultySwitch(string diff)
         {
             switch (diff)
             {
-                case "simple": SimpleTypography(); break;
-                case "medium": MediumTypography(); break;
-                case "hard": HardTypography(); break;
+                case "simple": SimpleTypography(320, 410); break;
+                case "medium": MediumTypography(640, 660); break;
+                case "hard"  : HardTypography(1000, 660) ; break;
             }
-        }
+        } // 選擇難度
 
 
         // === 組裝形成排版 ===
         // wid x hei 顆按鈕，chessLen 為每顆按鈕長度
 
-        void SimpleTypography() // 簡單難度排版
+        void SetScreenSize(int screenWid, int screenHei)
         {
-            int[] grids = new int[] { 8, 8 };
-            int chessLen = 30,
-                gridHei = grids[0],
-                gridWid = grids[1];
-            chessBoard = new Button[gridHei, gridWid];
-
-            this.Size = new Size(320, 410);
+            this.Size = new Size(screenWid, screenHei); // 視窗大小
             this.screenWidth = Size.Width;
             this.screenHeight = Size.Height;
-            
-
+        } // 設定一開始的視窗大小
+        void SetGrid(int gridWid, int gridHei)
+        {
+            int[] grids = new int[] { gridHei, gridWid };
+            chessBoard = new Button[gridHei, gridWid];
+        } // 設定地雷盤的格子數
+        void BuildGrid(int gridWid, int gridHei, int chessLen,
+                       string leftText, string rightText, string smileImgPath = "smile.png")
+        {
             int posX, posY, sideLen, imgSize, btnMargins = 3;
             float labelFontSize = 18;
             string imgPath, text;
@@ -55,111 +55,62 @@ namespace s1131375程式設計期末報告
             ClickerBoard(
                 gridWid,
                 gridHei,
-                posX = (screenWidth - (gridWid * chessLen)) / 2 - btnMargins,
-                posY = screenHeight / 5,
+                posX = (screenWidth - (gridWid * chessLen)) / 2 - 2*btnMargins,// 有 3px Margin，左右都有 Margin，所以要 *2
+                posY = 100, // 把 y 座標統一設成 100
                 chessLen); // 踩地雷的地方
 
             SmileResetButton(
-                sideLen = (int)(1.5*chessLen),
+                sideLen = (int)(1.5 * chessLen),
                 posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                imgPath = "smile.png",
+                imgPath = smileImgPath,
                 imgSize = 50); // 笑臉重置按鈕
 
             GenerateLabel(
                 posX = chessBoard[0, 0].Location.X,
                 posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
                 labelFontSize,
-                text = "1234"); // 左邊標籤 顯示旗子數量
+                text = leftText); // 左邊標籤 顯示旗子數量
 
             GenerateLabel(
-                posX = chessBoard[0, chessBoard.GetLength(0)-1].Location.X - sideLen,
+                //posX = chessBoard[0, chessBoard.GetLength(0) - 1].Location.X - sideLen,
+                posX = chessBoard[0, chessBoard.GetLength(1) - 1].Location.X - sideLen,
                 posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
                 labelFontSize,
-                text = "5678"); // 右邊標籤顯示時間經過了多少
+                text = rightText); // 右邊標籤顯示時間經過了多少
         }
-        void MediumTypography()
+                       // 把所有排版物件組裝起來
+
+        void SimpleTypography(int screenWid=320, int screenHei=410, string flagsNum = "999", string times = "00:00")
         {
-            int[] grids = new int[] { 16, 16 };
-            int chessLen = 30,
-                gridHei = grids[0],
-                gridWid = grids[1];
-            chessBoard = new Button[gridHei, gridWid];
+            int gridWid = 8,
+                gridHei = 8,
+                chessLen = 30;
 
-            this.Size = new Size(320, 410);
-            this.screenWidth = Size.Width;
-            this.screenHeight = Size.Height;
+            SetScreenSize(screenWid, screenHei);
+            SetGrid(gridWid, gridHei);
+            BuildGrid(gridWid, gridHei, chessLen, leftText: flagsNum, rightText: times);
+        }// 簡單難度排版
+        void MediumTypography(int screenWid=640, int screenHei=660, string flagsNum = "999", string times = "00:00")
+        {
+            int gridWid = 16,
+                gridHei = 16,
+                chessLen = 30;
 
-
-            int posX, posY, sideLen, imgSize, btnMargins = 3;
-            float labelFontSize = 18;
-            string imgPath, text;
-
-            ClickerBoard(
-                gridWid,
-                gridHei,
-                posX = (screenWidth - (gridWid * chessLen)) / 2 - btnMargins,
-                posY = screenHeight / 5,
-                chessLen); // 踩地雷的地方
-
-            SmileResetButton(
-                sideLen = (int)(1.5 * chessLen),
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                imgPath = "smile.png",
-                imgSize = 50); // 笑臉重置按鈕
-
-            GenerateLabel(
-                posX = chessBoard[0, 0].Location.X,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = "1234"); // 左邊標籤 顯示旗子數量
-
-            GenerateLabel(
-                posX = chessBoard[0, chessBoard.GetLength(0) - 1].Location.X - sideLen,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = "5678"); // 右邊標籤顯示時間經過了多少
+            SetScreenSize(screenWid, screenHei);
+            SetGrid(gridWid, gridHei);
+            BuildGrid(gridWid, gridHei, chessLen,
+                leftText: flagsNum, rightText: times);
         } // 中等難度排版
-        void HardTypography()
+        void HardTypography(int screenWid=960, int screenHei=660, string flagsNum = "999", string times = "00:00")
         {
-            int[] grids = new int[] { 16, 16 };
-            int chessLen = 30,
-                gridHei = grids[0],
-                gridWid = grids[1];
-            chessBoard = new Button[gridHei, gridWid];
+            int gridWid = 30,
+                gridHei = 16,
+                chessLen = 30;
 
-            this.Size = new Size(320, 410);
-            this.screenWidth = Size.Width;
-            this.screenHeight = Size.Height;
-
-
-            int posX, posY, sideLen, imgSize, btnMargins = 3;
-            float labelFontSize = 18;
-            string imgPath, text;
-
-            ClickerBoard(
-                gridWid,
-                gridHei,
-                posX = (screenWidth - (gridWid * chessLen)) / 2 - btnMargins,
-                posY = screenHeight / 5,
-                chessLen); // 踩地雷的地方
-
-            SmileResetButton(
-                sideLen = (int)(1.5 * chessLen),
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                imgPath = "smile.png",
-                imgSize = 50); // 笑臉重置按鈕
-
-            GenerateLabel(
-                posX = chessBoard[0, 0].Location.X,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = "1234"); // 左邊標籤 顯示旗子數量
-
-            GenerateLabel(
-                posX = chessBoard[0, chessBoard.GetLength(0) - 1].Location.X - sideLen,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = "5678"); // 右邊標籤顯示時間經過了多少
+            SetScreenSize(screenWid, screenHei);
+            SetGrid(gridWid, gridHei);
+            BuildGrid(gridWid, gridHei, chessLen,
+                leftText: flagsNum, rightText: times);
         } // 困難難度排版
 
 
@@ -200,7 +151,8 @@ namespace s1131375程式設計期末報告
         void SmileResetButton(int sideLen, int posY, string imgPath = "smile.png", int imgSize=50)
         {
 
-            int x = screenWidth / 2 - sideLen / 2 - 3, // 有 3px Margin
+            int btnMargin = 3;
+            int x = screenWidth / 2 - sideLen / 2 - 2*btnMargin, // 有 3px Margin，左右都有 Margin，所以要 *2
                 y = posY;
 
             Button btn = (Button)GenerateSquareButton(sideLen, x, y, f.Empty);
@@ -217,7 +169,7 @@ namespace s1131375程式設計期末報告
                     int x = posX + w * Len,
                         y = posY + h * Len;
 
-                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, tag: $"{h}{w}");
+                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, tag: $"{h},{w}");
                 }
             }
         } // 生成出 width x height 個按鈕，position 在左上角
