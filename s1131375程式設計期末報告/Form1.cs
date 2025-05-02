@@ -1,6 +1,6 @@
 using System;
 
-namespace s1131375程式設計期末報告 // v3
+namespace s1131375程式設計期末報告
 {
     public partial class Form1 : Form
     {
