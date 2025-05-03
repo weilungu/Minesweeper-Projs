@@ -1,0 +1,14 @@
+C:\Users\ronny\source\repos\進階程式設計期末\bin\Debug\net8.0\進階程式設計期末.exe
+C:\Users\ronny\source\repos\進階程式設計期末\bin\Debug\net8.0\進階程式設計期末.deps.json
+C:\Users\ronny\source\repos\進階程式設計期末\bin\Debug\net8.0\進階程式設計期末.runtimeconfig.json
+C:\Users\ronny\source\repos\進階程式設計期末\bin\Debug\net8.0\進階程式設計期末.dll
+C:\Users\ronny\source\repos\進階程式設計期末\bin\Debug\net8.0\進階程式設計期末.pdb
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.AssemblyInfoInputs.cache
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.AssemblyInfo.cs
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.csproj.CoreCompileInputs.cache
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.dll
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\refint\進階程式設計期末.dll
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.pdb
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\進階程式設計期末.genruntimeconfig.cache
+C:\Users\ronny\source\repos\進階程式設計期末\obj\Debug\net8.0\ref\進階程式設計期末.dll
