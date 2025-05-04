@@ -114,37 +114,6 @@ namespace s1131375程式設計期末報告
         } // 困難難度排版
 
 
-        // === 動態生成物件 ===
-        object GenerateSquareButton(int sideLen, int x, int y, EventHandler func, string name = "btn", string text="", string tag = "")
-        {
-            Button btn = new Button();
-
-            btn.Location = new Point(x, y);
-            btn.Name = name;
-            btn.Size = new Size(sideLen, sideLen);
-            btn.TabIndex = 0;
-            btn.Text = text;
-            btn.UseVisualStyleBackColor = true;
-            btn.Click += func;
-            btn.Tag = tag;
-
-            Controls.Add(btn);
-            return btn;
-        } // 生出正方形按鈕
-        void GenerateLabel(int posX, int posY, float fontSize, string text, string name="label")
-        {
-            Label lb = new Label();
-
-            lb.Font = new Font("Microsoft JhengHei UI", fontSize, FontStyle.Regular, GraphicsUnit.Point, 136);
-            lb.AutoSize = true;
-            lb.Location = new Point(posX, posY);
-            lb.Name = name;
-            lb.Size = new Size(100, 100);
-            lb.TabIndex = 0;
-            lb.Text = text;
-
-            this.Controls.Add(lb);
-        }
 
 
         // === 組裝物件 ===
@@ -173,5 +142,38 @@ namespace s1131375程式設計期末報告
                 }
             }
         } // 生成出 width x height 個按鈕，position 在左上角
+
+
+        // === 動態生成物件 ===
+        object GenerateSquareButton(int sideLen, int x, int y, EventHandler func, string name = "btn", string text = "", string tag = "")
+        {
+            Button btn = new Button();
+
+            btn.Location = new Point(x, y);
+            btn.Name = name;
+            btn.Size = new Size(sideLen, sideLen);
+            btn.TabIndex = 0;
+            btn.Text = text;
+            btn.UseVisualStyleBackColor = true;
+            btn.Click += func;
+            btn.Tag = tag;
+
+            Controls.Add(btn);
+            return btn;
+        } // 生出正方形按鈕
+        void GenerateLabel(int posX, int posY, float fontSize, string text, string name = "label")
+        {
+            Label lb = new Label();
+
+            lb.Font = new Font("Microsoft JhengHei UI", fontSize, FontStyle.Regular, GraphicsUnit.Point, 136);
+            lb.AutoSize = true;
+            lb.Location = new Point(posX, posY);
+            lb.Name = name;
+            lb.Size = new Size(100, 100);
+            lb.TabIndex = 0;
+            lb.Text = text;
+
+            this.Controls.Add(lb);
+        }
     }
 }
