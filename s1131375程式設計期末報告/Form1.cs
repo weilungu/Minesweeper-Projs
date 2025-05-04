@@ -1,30 +1,53 @@
 using System;
 
-namespace s1131375程式設計期末報告
+namespace s1131375程式設計期末報告 // v4
 {
     public partial class Form1 : Form
     {
         int screenWidth, screenHeight;
+        string[] difficulty;
+        string diff;
+
+        int bombsNum;
 
         Engine engine;
         ButtonFunctions f;
         Button[,] chessBoard; // 在這裡增加了 Tag，例如 chessBoard[0, 0] 的 Tag : 00，chessBoard[1, 2] 的 Tag : 12，以此類推
+
+        public int getBombsNum { get => bombsNum; }
+        public int getChessHeight {  get => chessBoard.GetLength(0);}
+        public int getChessWidth {  get => chessBoard.GetLength(1);}
 
         public Form1()
         {
             InitializeComponent();
 
             engine = new Engine();
-            f = new ButtonFunctions();
+            f = new ButtonFunctions(this);
 
             // 排版初始化
-            string[] difficulty = new string[] { "simple", "medium", "hard" };
-            DifficultySwitch(difficulty[1]); // 連結難度的地方
+            difficulty = new string[] { "simple", "medium", "hard" };
+            diff = difficulty[1];
+
+            if (diff == difficulty[0])
+            {
+                bombsNum = 10;
+            }
+            else if (diff == difficulty[1])
+            {
+                bombsNum = 30;
+            }
+            else
+            {
+                bombsNum = 99;
+            }
+
+            DifficultySwitch(); // 連結難度的地方
         }
 
-        void DifficultySwitch(string diff)
+        void DifficultySwitch()
         {
-            switch (diff)
+            switch (this.diff)
             {
                 case "simple": SimpleTypography(320, 410); break;
                 case "medium": MediumTypography(640, 660); break;
@@ -82,7 +105,7 @@ namespace s1131375程式設計期末報告
         }
                        // 把所有排版物件組裝起來
 
-        void SimpleTypography(int screenWid=320, int screenHei=410, string flagsNum = "999", string times = "00:00")
+        void SimpleTypography(int screenWid=320, int screenHei=410, string flagsNum = "010", string times = "00:00")
         {
             int gridWid = 8,
                 gridHei = 8,
@@ -92,7 +115,7 @@ namespace s1131375程式設計期末報告
             SetGrid(gridWid, gridHei);
             BuildGrid(gridWid, gridHei, chessLen, leftText: flagsNum, rightText: times);
         }// 簡單難度排版
-        void MediumTypography(int screenWid=640, int screenHei=660, string flagsNum = "999", string times = "00:00")
+        void MediumTypography(int screenWid=640, int screenHei=660, string flagsNum = "030", string times = "00:00")
         {
             int gridWid = 16,
                 gridHei = 16,
@@ -103,7 +126,7 @@ namespace s1131375程式設計期末報告
             BuildGrid(gridWid, gridHei, chessLen,
                 leftText: flagsNum, rightText: times);
         } // 中等難度排版
-        void HardTypography(int screenWid=960, int screenHei=660, string flagsNum = "999", string times = "00:00")
+        void HardTypography(int screenWid=960, int screenHei=660, string flagsNum = "099", string times = "00:00")
         {
             int gridWid = 30,
                 gridHei = 16,
@@ -116,8 +139,6 @@ namespace s1131375程式設計期末報告
         } // 困難難度排版
 
 
-
-
         // === 組裝物件 ===
         void SmileResetButton(int sideLen, int posY, string imgPath = "smile.png", int imgSize=50)
         {
@@ -126,23 +147,24 @@ namespace s1131375程式設計期末報告
             int x = screenWidth / 2 - sideLen / 2 - 2*btnMargin, // 有 3px Margin，左右都有 Margin，所以要 *2
                 y = posY;
 
-            Button btn = (Button)GenerateSquareButton(sideLen, x, y, f.Empty);
+            Button btn = (Button)GenerateSquareButton(sideLen, x, y, f.ResetMarking);
 
             btn.Image = Image.FromFile(imgPath);
             btn.Image = new Bitmap(btn.Image, imgSize, imgSize);
         }
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
-            engine.placebomb(30);
+            engine.placebomb(bombsNum);
             for (int h = 0; h < height; h++)
             {
                 for (int w = 0; w < width; w++)
                 {
+                    string btnName = $"chess_{h}_{w}";
                     int x = posX + w * Len,
                         y = posY + h * Len;
 
                     char haveBomb = MarkingMines(h, w);
-                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, tag: $"{h},{w},{haveBomb}", text: $"{haveBomb}");
+                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, name: btnName, tag: $"{h},{w},{haveBomb}", text: $"{haveBomb}");
                 }
             }
         } // 生成出 width x height 個按鈕，position 在左上角
@@ -203,5 +225,10 @@ namespace s1131375程式設計期末報告
             return result;
         } // 標記有地雷，或周圍地雷的數量
 
+        // === 非物件功能 ===
+        void haha()
+        {
+
+        } // 可能會用到
     }
 }

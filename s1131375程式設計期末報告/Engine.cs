@@ -4,7 +4,7 @@ namespace s1131375程式設計期末報告
 {
 
 
-    internal class Engine
+    internal class Engine // 暫時先把一些遊戲邏輯放在這裡
     {
         public int x = 16, y = 16; //地圖大小
         public int bombnum = 0;
