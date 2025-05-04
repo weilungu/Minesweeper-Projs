@@ -6,6 +6,7 @@ namespace s1131375程式設計期末報告
     {
         int screenWidth, screenHeight;
 
+        Engine engine;
         ButtonFunctions f;
         Button[,] chessBoard; // 在這裡增加了 Tag，例如 chessBoard[0, 0] 的 Tag : 00，chessBoard[1, 2] 的 Tag : 12，以此類推
 
@@ -13,11 +14,12 @@ namespace s1131375程式設計期末報告
         {
             InitializeComponent();
 
+            engine = new Engine();
             f = new ButtonFunctions();
 
             // 排版初始化
             string[] difficulty = new string[] { "simple", "medium", "hard" };
-            DifficultySwitch(difficulty[0]); // 連結難度的地方
+            DifficultySwitch(difficulty[1]); // 連結難度的地方
         }
 
         void DifficultySwitch(string diff)
@@ -131,6 +133,7 @@ namespace s1131375程式設計期末報告
         }
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
+            engine.placebomb(30);
             for (int h = 0; h < height; h++)
             {
                 for (int w = 0; w < width; w++)
@@ -138,7 +141,8 @@ namespace s1131375程式設計期末報告
                     int x = posX + w * Len,
                         y = posY + h * Len;
 
-                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, tag: $"{h},{w}");
+                    char haveBomb = MarkingMines(h, w);
+                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, tag: $"{h},{w},{haveBomb}", text: $"{haveBomb}");
                 }
             }
         } // 生成出 width x height 個按鈕，position 在左上角
@@ -175,5 +179,29 @@ namespace s1131375程式設計期末報告
 
             this.Controls.Add(lb);
         }
+        char MarkingMines(int h, int w)
+        {
+            char result = '\0';
+            int[,] minesMap = engine.a; // 設置 16 x 16 的 Array (目前)
+
+            int bombsAround = minesMap[h, w]; // 回傳 -1 代表那一格是地雷
+            bool haveMines = (bombsAround == -1);
+
+            if (haveMines)
+            {
+                result = '*';
+            }
+            else if(bombsAround == 0)
+            {
+                result = ' ';
+            }
+            else
+            {
+                result = (char)('0' + bombsAround);
+            }
+
+            return result;
+        } // 標記有地雷，或周圍地雷的數量
+
     }
 }
