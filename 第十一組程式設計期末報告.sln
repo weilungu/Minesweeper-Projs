@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "s1131375程式設計期末報告", "s1131375程式設計期末報告\s1131375程式設計期末報告.csproj", "{4787E563-A62B-46CD-9D3A-A0377CC9A785}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "第十一組程式設計期末報告", "s1131375程式設計期末報告\第十一組程式設計期末報告.csproj", "{4787E563-A62B-46CD-9D3A-A0377CC9A785}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

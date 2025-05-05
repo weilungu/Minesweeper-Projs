@@ -1,4 +1,4 @@
-namespace s1131375程式設計期末報告
+namespace 第十一組程式設計期末報告
 {
     internal static class Program
     {

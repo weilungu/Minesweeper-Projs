@@ -1,4 +1,4 @@
-﻿namespace s1131375程式設計期末報告
+﻿namespace 第十一組程式設計期末報告
 {
     partial class Form1
     {
@@ -32,11 +32,13 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(9F, 19F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(482, 453);
+            ClientSize = new Size(375, 358);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             ResumeLayout(false);
         }
 

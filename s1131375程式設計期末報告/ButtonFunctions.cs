@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace s1131375程式設計期末報告
+namespace 第十一組程式設計期末報告
 {
     internal class ButtonFunctions // 功能可以寫在這裡
     {
@@ -22,8 +22,8 @@ namespace s1131375程式設計期末報告
         public void ResetMarking(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-
-            engine.placebomb(form.getBombsNum);
+            engine.resetmap();
+            engine.placebomb(/*form.getBombsNum*/ 5);
             for (int h=0; h<form.getChessHeight; h++)
             {
                 for(int w=0;  w<form.getChessWidth; w++)
@@ -46,9 +46,9 @@ namespace s1131375程式設計期末報告
         char MarkingMines(int h, int w)
         {
             char result = '\0';
-            int[,] minesMap = engine.a; // 設置 16 x 16 的 Array (目前)
+            
 
-            int bombsAround = minesMap[h, w]; // 回傳 -1 代表那一格是地雷
+            int bombsAround = engine.a[h, w]; // 回傳 -1 代表那一格是地雷
             bool haveMines = (bombsAround == -1);
 
             if (haveMines)

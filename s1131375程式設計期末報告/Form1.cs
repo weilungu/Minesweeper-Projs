@@ -1,6 +1,6 @@
 using System;
 
-namespace s1131375程式設計期末報告 // v4
+namespace 第十一組程式設計期末報告 // v5
 {
     public partial class Form1 : Form
     {
@@ -15,8 +15,8 @@ namespace s1131375程式設計期末報告 // v4
         Button[,] chessBoard; // 在這裡增加了 Tag，例如 chessBoard[0, 0] 的 Tag : 00，chessBoard[1, 2] 的 Tag : 12，以此類推
 
         public int getBombsNum { get => bombsNum; }
-        public int getChessHeight {  get => chessBoard.GetLength(0);}
-        public int getChessWidth {  get => chessBoard.GetLength(1);}
+        public int getChessHeight { get => chessBoard.GetLength(0); }
+        public int getChessWidth { get => chessBoard.GetLength(1); }
 
         public Form1()
         {
@@ -51,7 +51,7 @@ namespace s1131375程式設計期末報告 // v4
             {
                 case "simple": SimpleTypography(320, 410); break;
                 case "medium": MediumTypography(640, 660); break;
-                case "hard"  : HardTypography(1000, 660) ; break;
+                case "hard": HardTypography(1000, 660); break;
             }
         } // 選擇難度
 
@@ -80,7 +80,7 @@ namespace s1131375程式設計期末報告 // v4
             ClickerBoard(
                 gridWid,
                 gridHei,
-                posX = (screenWidth - (gridWid * chessLen)) / 2 - 2*btnMargins,// 有 3px Margin，左右都有 Margin，所以要 *2
+                posX = (screenWidth - (gridWid * chessLen)) / 2 - 2 * btnMargins,// 有 3px Margin，左右都有 Margin，所以要 *2
                 posY = 100, // 把 y 座標統一設成 100
                 chessLen); // 踩地雷的地方
 
@@ -103,9 +103,9 @@ namespace s1131375程式設計期末報告 // v4
                 labelFontSize,
                 text = rightText); // 右邊標籤顯示時間經過了多少
         }
-                       // 把所有排版物件組裝起來
+        // 把所有排版物件組裝起來
 
-        void SimpleTypography(int screenWid=320, int screenHei=410, string flagsNum = "010", string times = "00:00")
+        void SimpleTypography(int screenWid = 320, int screenHei = 410, string flagsNum = "010", string times = "00:00")
         {
             int gridWid = 8,
                 gridHei = 8,
@@ -115,7 +115,7 @@ namespace s1131375程式設計期末報告 // v4
             SetGrid(gridWid, gridHei);
             BuildGrid(gridWid, gridHei, chessLen, leftText: flagsNum, rightText: times);
         }// 簡單難度排版
-        void MediumTypography(int screenWid=640, int screenHei=660, string flagsNum = "030", string times = "00:00")
+        void MediumTypography(int screenWid = 640, int screenHei = 660, string flagsNum = "030", string times = "00:00")
         {
             int gridWid = 16,
                 gridHei = 16,
@@ -126,7 +126,7 @@ namespace s1131375程式設計期末報告 // v4
             BuildGrid(gridWid, gridHei, chessLen,
                 leftText: flagsNum, rightText: times);
         } // 中等難度排版
-        void HardTypography(int screenWid=960, int screenHei=660, string flagsNum = "099", string times = "00:00")
+        void HardTypography(int screenWid = 960, int screenHei = 660, string flagsNum = "099", string times = "00:00")
         {
             int gridWid = 30,
                 gridHei = 16,
@@ -140,11 +140,11 @@ namespace s1131375程式設計期末報告 // v4
 
 
         // === 組裝物件 ===
-        void SmileResetButton(int sideLen, int posY, string imgPath = "smile.png", int imgSize=50)
+        void SmileResetButton(int sideLen, int posY, string imgPath = "smile.png", int imgSize = 50)
         {
 
             int btnMargin = 3;
-            int x = screenWidth / 2 - sideLen / 2 - 2*btnMargin, // 有 3px Margin，左右都有 Margin，所以要 *2
+            int x = screenWidth / 2 - sideLen / 2 - 2 * btnMargin, // 有 3px Margin，左右都有 Margin，所以要 *2
                 y = posY;
 
             Button btn = (Button)GenerateSquareButton(sideLen, x, y, f.ResetMarking);
@@ -154,7 +154,7 @@ namespace s1131375程式設計期末報告 // v4
         }
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
-            engine.placebomb(bombsNum);
+            engine.placebomb(/*bombsNum*/ 5);
             for (int h = 0; h < height; h++)
             {
                 for (int w = 0; w < width; w++)
@@ -203,26 +203,20 @@ namespace s1131375程式設計期末報告 // v4
         }
         char MarkingMines(int h, int w)
         {
-            char result = '\0';
-            int[,] minesMap = engine.a; // 設置 16 x 16 的 Array (目前)
-
-            int bombsAround = minesMap[h, w]; // 回傳 -1 代表那一格是地雷
-            bool haveMines = (bombsAround == -1);
-
-            if (haveMines)
+            int bombsAround = engine.a[h, w]; // 回傳 -1 代表那一格是地雷
+            if (bombsAround == -1)
             {
-                result = '*';
+                return '*';
             }
-            else if(bombsAround == 0)
+            else if (bombsAround == 0)
             {
-                result = ' ';
+                return ' ';
             }
             else
             {
-                result = (char)('0' + bombsAround);
+                return(char)('0' + bombsAround);
             }
 
-            return result;
         } // 標記有地雷，或周圍地雷的數量
 
         // === 非物件功能 ===
@@ -230,5 +224,10 @@ namespace s1131375程式設計期末報告 // v4
         {
 
         } // 可能會用到
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
