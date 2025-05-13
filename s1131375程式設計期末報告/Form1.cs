@@ -6,7 +6,7 @@ namespace 第十一組程式設計期末報告 // v5
     {
         int screenWidth, screenHeight;
         string[] difficulty;
-        string diff;
+        string diff; 
 
         int bombsNum;
 
