@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("進階程式設計期末")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cccd06a7f599f87729edb781eea0b95882615786")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa0943b0e7f8279b99b007b75a7fe419df297065")]
 [assembly: System.Reflection.AssemblyProductAttribute("進階程式設計期末")]
 [assembly: System.Reflection.AssemblyTitleAttribute("進階程式設計期末")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
