@@ -1,3 +1,4 @@
+using System;
 namespace 第十一組程式設計期末報告
 {
     internal static class Program
@@ -11,7 +12,12 @@ namespace 第十一組程式設計期末報告
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Form2 startForm = new Form2();
+            if (startForm.ShowDialog() == DialogResult.OK)
+            {
+                int difficulty = startForm.getDifficulty; 
+                Application.Run(new Form1(difficulty));
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ namespace 第十一組程式設計期末報告 // v5
     public partial class Form1 : Form
     {
         int screenWidth, screenHeight;
+        public int i = 1;
         string[] difficulty;
         string diff; 
 
@@ -18,7 +19,7 @@ namespace 第十一組程式設計期末報告 // v5
         public int getChessHeight { get => chessBoard.GetLength(0); }
         public int getChessWidth { get => chessBoard.GetLength(1); }
 
-        public Form1()
+        public Form1(int a)
         {
             InitializeComponent();
 
@@ -27,7 +28,8 @@ namespace 第十一組程式設計期末報告 // v5
 
             // 排版初始化
             difficulty = new string[] { "simple", "medium", "hard" };
-            diff = difficulty[1];
+            i = a - 1;
+            diff = difficulty[i];
 
             if (diff == difficulty[0])
             {
@@ -49,7 +51,7 @@ namespace 第十一組程式設計期末報告 // v5
         {
             switch (this.diff)
             {
-                case "simple": SimpleTypography(320, 410); break;
+                case "simple": SimpleTypography(320, 430); break;
                 case "medium": MediumTypography(640, 660); break;
                 case "hard": HardTypography(1000, 660); break;
             }
@@ -105,17 +107,16 @@ namespace 第十一組程式設計期末報告 // v5
         }
         // 把所有排版物件組裝起來
 
-        void SimpleTypography(int screenWid = 320, int screenHei = 410, string flagsNum = "010", string times = "00:00")
+        void SimpleTypography(int screenWid, int screenHei, string flagsNum = "010", string times = "00:00")
         {
-            int gridWid = 8,
-                gridHei = 8,
+            int gridWid = 9,
+                gridHei = 9,
                 chessLen = 30;
-
             SetScreenSize(screenWid, screenHei);
             SetGrid(gridWid, gridHei);
             BuildGrid(gridWid, gridHei, chessLen, leftText: flagsNum, rightText: times);
         }// 簡單難度排版
-        void MediumTypography(int screenWid = 640, int screenHei = 660, string flagsNum = "030", string times = "00:00")
+        void MediumTypography(int screenWid, int screenHei, string flagsNum = "030", string times = "00:00")
         {
             int gridWid = 16,
                 gridHei = 16,
@@ -126,7 +127,7 @@ namespace 第十一組程式設計期末報告 // v5
             BuildGrid(gridWid, gridHei, chessLen,
                 leftText: flagsNum, rightText: times);
         } // 中等難度排版
-        void HardTypography(int screenWid = 960, int screenHei = 660, string flagsNum = "099", string times = "00:00")
+        void HardTypography(int screenWid, int screenHei, string flagsNum = "099", string times = "00:00")
         {
             int gridWid = 30,
                 gridHei = 16,
@@ -154,7 +155,8 @@ namespace 第十一組程式設計期末報告 // v5
         }
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
-            engine.placebomb(/*bombsNum*/ 5);
+            engine.setmapsize(height, width); // 行数 = height，列数 = width
+            engine.placebomb(bombsNum);
             for (int h = 0; h < height; h++)
             {
                 for (int w = 0; w < width; w++)
@@ -229,5 +231,6 @@ namespace 第十一組程式設計期末報告 // v5
         {
 
         }
+        
     }
 }

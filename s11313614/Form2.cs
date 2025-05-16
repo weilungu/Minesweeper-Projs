@@ -1,8 +1,8 @@
 namespace s11313614
 {
-    public partial class Form1 : Form
+    public partial class Form2 : Form
     {
-        public Form1()
+        public Form2()
         {
             InitializeComponent();
         }
@@ -11,7 +11,7 @@ namespace s11313614
         {
 
         }
-        private void ¢êutton1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
 
         }
