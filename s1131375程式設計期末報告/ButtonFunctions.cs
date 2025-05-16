@@ -33,7 +33,7 @@ namespace 第十一組程式設計期末報告
                     engine.setmapsize(16, 16);
                     break;
                 case 99:
-                    engine.setmapsize(30, 16);
+                    engine.setmapsize(16, 30);
                     break;
             }
             engine.resetmap();
@@ -59,6 +59,11 @@ namespace 第十一組程式設計期末報告
         char MarkingMines(int h, int w)
         {
             char result = '\0';
+
+            if (h < 0 || h >= engine.x || w < 0 || w >= engine.y)
+            {
+                return ' '; // 返回默认值或抛出友好错误
+            }
 
             int bombsAround = engine.a[h, w]; // 回傳 -1 代表那一格是地雷  
             bool haveMines = (bombsAround == -1);

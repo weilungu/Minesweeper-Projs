@@ -155,7 +155,7 @@ namespace 第十一組程式設計期末報告 // v5
         }
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
-            engine.setmapsize(height, width); // 行数 = height，列数 = width
+            engine.setmapsize(height, width);
             engine.placebomb(bombsNum);
             for (int h = 0; h < height; h++)
             {
