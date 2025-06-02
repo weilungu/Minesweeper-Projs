@@ -10,9 +10,11 @@ namespace 第十一組程式設計期末報告
         public int bombnum = 0;
         public char[,] map = new char[16, 16];
         public int[,] a = new int[16, 16];
+        public bool[,] iswalked = new bool[16, 16];
         static Random random = new Random();
         public Engine()
         {
+
         }
         public void resetmap()
         {
@@ -116,6 +118,7 @@ namespace 第十一組程式設計期末報告
                         {
                             map[X, Y] = ' ';
                             afterTry(X, Y);
+
                         }
                         if (map[X, Y] == '*' && a[X, Y] > 0)
                         {

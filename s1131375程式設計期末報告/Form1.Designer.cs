@@ -40,6 +40,17 @@
             Text = "Form1";
             Load += Form1_Load;
             ResumeLayout(false);
+            this.MouseUp += (sender, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    var control = GetChildAtPoint(e.Location);
+                    if (control is Button btn && btn.Name.StartsWith("chess_"))
+                    {
+                        btn.Text = btn.Text == "" ? "F" : "";
+                    }
+                }
+            };
         }
 
         #endregion

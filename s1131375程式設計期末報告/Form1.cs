@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 
 namespace 第十一組程式設計期末報告 // v5
 {
@@ -10,11 +11,19 @@ namespace 第十一組程式設計期末報告 // v5
         string diff; 
 
         int bombsNum;
-
+        
         Engine engine;
         ButtonFunctions f;
         Button[,] chessBoard; // 在這裡增加了 Tag，例如 chessBoard[0, 0] 的 Tag : 00，chessBoard[1, 2] 的 Tag : 12，以此類推
-
+        private System.Windows.Forms.Timer gameTimer;
+        private DateTime gameStartTime;
+        private Label flagLabel;
+        private Label timeLabel; // 用於顯示時間的標籤
+        private int remainingFlags;
+        public bool IsGameStarted { get; set; }
+        public int GetRemainingFlags() => remainingFlags;
+        public void DecreaseFlagCount() => flagLabel.Text = (--remainingFlags).ToString("D3");
+        public void IncreaseFlagCount() => flagLabel.Text = (++remainingFlags).ToString("D3");
         public int getBombsNum { get => bombsNum; }
         public int getChessHeight { get => chessBoard.GetLength(0); }
         public int getChessWidth { get => chessBoard.GetLength(1); }
@@ -22,31 +31,49 @@ namespace 第十一組程式設計期末報告 // v5
         public Form1(int a)
         {
             InitializeComponent();
+            InitializeTimer(); // 初始化計時器
 
             engine = new Engine();
             f = new ButtonFunctions(this);
 
-            // 排版初始化
+            // 初始化難度
             difficulty = new string[] { "simple", "medium", "hard" };
             i = a - 1;
             diff = difficulty[i];
 
-            if (diff == difficulty[0])
-            {
-                bombsNum = 10;
-            }
-            else if (diff == difficulty[1])
-            {
-                bombsNum = 30;
-            }
-            else
-            {
-                bombsNum = 99;
-            }
+            if (diff == difficulty[0]) bombsNum = 10;
+            else if (diff == difficulty[1]) bombsNum = 30;
+            else bombsNum = 99;
 
-            DifficultySwitch(); // 連結難度的地方
+            DifficultySwitch(); // 根據難度設置界面
         }
 
+        private void InitializeTimer()
+        {
+            gameTimer = new System.Windows.Forms.Timer();
+            gameTimer.Interval = 1000;
+            gameTimer.Tick += GameTimer_Tick;
+        }
+
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            TimeSpan elapsed = DateTime.Now - gameStartTime;
+            timeLabel.Text = $"{elapsed.Minutes:D2}:{elapsed.Seconds:D2}";
+        }
+        public void StartTimer()
+        {
+            gameStartTime = DateTime.Now;
+            gameTimer.Start();
+        }
+        public void StopTimer()
+        {
+            gameTimer.Stop();
+        }
+        public void ResetTimer()
+        {
+            gameTimer.Stop();
+            timeLabel.Text = "00:00";
+        }
         void DifficultySwitch()
         {
             switch (this.diff)
@@ -73,38 +100,66 @@ namespace 第十一組程式設計期末報告 // v5
             chessBoard = new Button[gridHei, gridWid];
         } // 設定地雷盤的格子數
         void BuildGrid(int gridWid, int gridHei, int chessLen,
-                       string leftText, string rightText, string smileImgPath = "smile.png")
+               string leftText, string rightText, string smileImgPath = "smile.png")
         {
-            int posX, posY, sideLen, imgSize, btnMargins = 3;
-            float labelFontSize = 18;
-            string imgPath, text;
+            f.InitializeGame(gridHei, gridWid);
+            //棋盤按鈕
+            ClickerBoard(gridWid, gridHei,
+                         posX: (screenWidth - (gridWid * chessLen)) / 2 - 6,
+                         posY: 100,
+                         Len: chessLen);
 
-            ClickerBoard(
-                gridWid,
-                gridHei,
-                posX = (screenWidth - (gridWid * chessLen)) / 2 - 2 * btnMargins,// 有 3px Margin，左右都有 Margin，所以要 *2
-                posY = 100, // 把 y 座標統一設成 100
-                chessLen); // 踩地雷的地方
+            //笑臉重置
+            int sideLen = (int)(1.5 * chessLen);
+            int smileY = (100 - sideLen) / 2;
+            SmileResetButton(sideLen, smileY, smileImgPath, 50);
 
-            SmileResetButton(
-                sideLen = (int)(1.5 * chessLen),
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                imgPath = smileImgPath,
-                imgSize = 50); // 笑臉重置按鈕
+            //標籤位置
+            int labelY = smileY + (sideLen - 30) / 2; // 垂直居中
+            int flagX = chessBoard[0, 0].Location.X;
+            int timeX = chessBoard[0, gridWid - 1].Location.X + chessLen - 100;
 
-            GenerateLabel(
-                posX = chessBoard[0, 0].Location.X,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = leftText); // 左邊標籤 顯示旗子數量
+            //創建標籤
+            flagLabel = GenerateLabel(flagX, labelY, 18, leftText, "flagLabel");
+            timeLabel = GenerateLabel(timeX, labelY, 18, rightText, "timeLabel");
 
-            GenerateLabel(
-                //posX = chessBoard[0, chessBoard.GetLength(0) - 1].Location.X - sideLen,
-                posX = chessBoard[0, chessBoard.GetLength(1) - 1].Location.X - sideLen,
-                posY = (chessBoard[0, 0].Location.Y - sideLen) / 2,
-                labelFontSize,
-                text = rightText); // 右邊標籤顯示時間經過了多少
+            //初始化旗子數
+            remainingFlags = bombsNum;
+            flagLabel.Text = remainingFlags.ToString("D3");
+
+            //按鈕事件
+            for (int h = 0; h < gridHei; h++)
+            {
+                for (int w = 0; w < gridWid; w++)
+                {
+                    if (chessBoard[h, w] != null)
+                    {
+                        chessBoard[h, w].Click -= f.HandleButtonClick;
+                        chessBoard[h, w].MouseDown -= f.HandleRightClick;
+                        chessBoard[h, w].Click += f.HandleButtonClick;
+                        chessBoard[h, w].MouseDown += f.HandleRightClick;
+                    }
+                }
+            }
+            ResetTimer();
         }
+        
+        Label GenerateLabel(int posX, int posY, float fontSize, string text, string name = "label")
+        {
+            Label lb = new Label();
+
+            lb.Font = new Font("Microsoft JhengHei UI", fontSize, FontStyle.Regular, GraphicsUnit.Point, 136);
+            lb.AutoSize = true;
+            lb.Location = new Point(posX, posY);
+            lb.Name = name;
+            lb.Size = new Size(100, 100);
+            lb.TabIndex = 0;
+            lb.Text = text;
+
+            this.Controls.Add(lb);
+            return lb; // 返回創建的標籤
+        }
+
         // 把所有排版物件組裝起來
 
         void SimpleTypography(int screenWid, int screenHei, string flagsNum = "010", string times = "00:00")
@@ -143,16 +198,17 @@ namespace 第十一組程式設計期末報告 // v5
         // === 組裝物件 ===
         void SmileResetButton(int sideLen, int posY, string imgPath = "smile.png", int imgSize = 50)
         {
-
             int btnMargin = 3;
-            int x = screenWidth / 2 - sideLen / 2 - 2 * btnMargin, // 有 3px Margin，左右都有 Margin，所以要 *2
+            int x = screenWidth / 2 - sideLen / 2 - 2 * btnMargin, // 左右各有3px Margin
                 y = posY;
-
             Button btn = (Button)GenerateSquareButton(sideLen, x, y, f.ResetMarking);
-
             btn.Image = Image.FromFile(imgPath);
             btn.Image = new Bitmap(btn.Image, imgSize, imgSize);
+            btn.Click -= f.ResetMarking; // 確保不重複
+            btn.Click += f.ResetMarking;
+
         }
+
         void ClickerBoard(int width, int height, int posX, int posY, int Len)
         {
             engine.setmapsize(height, width);
@@ -164,45 +220,69 @@ namespace 第十一組程式設計期末報告 // v5
                     string btnName = $"chess_{h}_{w}";
                     int x = posX + w * Len,
                         y = posY + h * Len;
+                    char cellContent = MarkingMines(h, w);
+                    string tagValue = $"{h},{w},{cellContent}";
+                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, func: null, name: btnName, tag: tagValue, text: "");
 
-                    char haveBomb = MarkingMines(h, w);
-                    chessBoard[h, w] = (Button)GenerateSquareButton(Len, x, y, f.Empty, name: btnName, tag: $"{h},{w},{haveBomb}", text: $"{haveBomb}");
                 }
             }
         } // 生成出 width x height 個按鈕，position 在左上角
 
+        public void ResetGame()
+        {
+            foreach (Control control in this.Controls)
+            {
+                if (control is Button btn && btn.Name.StartsWith("chess_"))
+                {
+                    btn.Text = "";
+                    btn.Enabled = true;
+                    btn.BackColor = SystemColors.Control;
+                    if (btn.Name.StartsWith("chess_"))
+                    {
+                        // Debug：印出 btn.Name 及 btn.Tag
+                        Console.WriteLine($"{btn.Name}: {btn.Tag}");
+                    }
 
+                }
+            }
+            remainingFlags = bombsNum;
+            flagLabel.Text = remainingFlags.ToString("D3");
+            UpdateChessBoardTags();
+        }
+        public void UpdateChessBoardTags()
+        {
+            int rows = getChessHeight;
+            int cols = getChessWidth;
+            for (int h = 0; h < rows; h++)
+            {
+                for (int w = 0; w < cols; w++)
+                {
+                    string chessName = $"chess_{h}_{w}";
+                    Button chessButton = this.Controls.Find(chessName, true).FirstOrDefault() as Button;
+                    if (chessButton != null)
+                    {
+                        char newMark = MarkingMines(h, w);
+                        chessButton.Tag = $"{h},{w},{newMark}";
+                    }
+                }
+            }
+        }
         // === 動態生成物件 ===
         object GenerateSquareButton(int sideLen, int x, int y, EventHandler func, string name = "btn", string text = "", string tag = "")
         {
             Button btn = new Button();
-
             btn.Location = new Point(x, y);
             btn.Name = name;
             btn.Size = new Size(sideLen, sideLen);
             btn.TabIndex = 0;
-            btn.Text = text;
+            btn.Text = text; 
             btn.UseVisualStyleBackColor = true;
-            btn.Click += func;
-            btn.Tag = tag;
-
+            if (!string.IsNullOrEmpty(tag))
+                btn.Tag = tag;
             Controls.Add(btn);
             return btn;
-        } // 生出正方形按鈕
-        void GenerateLabel(int posX, int posY, float fontSize, string text, string name = "label")
-        {
-            Label lb = new Label();
-
-            lb.Font = new Font("Microsoft JhengHei UI", fontSize, FontStyle.Regular, GraphicsUnit.Point, 136);
-            lb.AutoSize = true;
-            lb.Location = new Point(posX, posY);
-            lb.Name = name;
-            lb.Size = new Size(100, 100);
-            lb.TabIndex = 0;
-            lb.Text = text;
-
-            this.Controls.Add(lb);
         }
+
         char MarkingMines(int h, int w)
         {
             int bombsAround = engine.a[h, w]; // 回傳 -1 代表那一格是地雷
@@ -220,12 +300,6 @@ namespace 第十一組程式設計期末報告 // v5
             }
 
         } // 標記有地雷，或周圍地雷的數量
-
-        // === 非物件功能 ===
-        void haha()
-        {
-
-        } // 可能會用到
 
         private void Form1_Load(object sender, EventArgs e)
         {
